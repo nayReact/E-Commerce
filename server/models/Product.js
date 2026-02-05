@@ -1,5 +1,4 @@
-import mongoose, { Schema } from "mongoose";
-import Category from "./Category";
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -90,4 +89,9 @@ productSchema.pre('save', function() {
     }
 })
 
-export default mongoose.model('Product', productSchema)
+productSchema.index({
+    name: 'text',
+    description: 'text'
+})
+
+export default mongoose.model('Product', productSchema) 

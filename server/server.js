@@ -4,6 +4,7 @@ import cors from 'cors'
 import connectDatabase from './config/database.js'
 import authRoutes from './routes/authRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js'
+import productRoutes from './routes/productRoutes.js'
 
 dotenv.config() // for env variable
 connectDatabase()
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {  //api for health check
 })
 app.use('/api/auth', authRoutes)   //mount route
 app.use('/api/categories',categoryRoutes)
+app.use('/api/products', productRoutes)
 //to start server
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
