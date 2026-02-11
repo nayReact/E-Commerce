@@ -39,10 +39,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    image:[ {
-        url: String,
-        public_id: String
-    }],
+    image:{
+        type: [
+            {
+                url: String,
+                public_id: String
+            }
+        ], default: []
+    },
     specifications: {
         type: Map,
         of: String

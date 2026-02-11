@@ -98,12 +98,12 @@ export const getProducts = async(req, res) => {     //to get all theproducts
 
 export const getProduct = async(req, res) => { //get single product
     try{
-        const product = await Product.findByIdAndUpdate(req, params.id,
+        const product = await Product.findByIdAndUpdate(req.params.id,
             {$inc: {views: 1}},
             { new: true }
         )
         .populate("category","name slug")
-        .populate("suncategory"," name slug")
+        .populate("subcategory"," name slug")
         .populate("seller", "name email avatar")
 
         if(!product) {
