@@ -23,7 +23,7 @@ export const createCategory = async(req, res) => {
         })
 
     }catch(error){
-        return res.statu(500).json({
+        return res.status(500).json({
             success: false,
             message: error.message
         })
@@ -81,6 +81,7 @@ export const updateCategory = async(req, res) => {
                 message: 'Category not found'
             })
         }
+        const {name, description, image, parent, isActive} = re.body
         const updates = {name, description, image, parent, isActive }
         Object.keys(updates).forEach(key => {
             if(updates[key] !== undefined) {

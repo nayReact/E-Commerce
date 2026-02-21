@@ -148,7 +148,7 @@ export const updateCartItem = async(req, res) => {
         }
 
         const itemIndex = cart.items.findIndex(
-            item => item.item._id.toString() === itemId
+            item => item._id.toString() === itemId
         )
         if(itemIndex === -1){
             return res.status(404).json({
