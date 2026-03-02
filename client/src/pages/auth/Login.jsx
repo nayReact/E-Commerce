@@ -64,9 +64,12 @@ const Login = () => {
                 </p>
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                     <p className="text-sm font-semibold text-blue-900 mb-2">Demo Credentials:</p>
-                    <p className="text-xs text-blue-800">Customer: alice@example.com / customer123</p>
+                    <p className="text-xs text-blue-800">Customer: test@one.com / pass123</p>
+                    <p className="text-xs text-blue-900">Customer: john@example.com / pass123</p>
                     <p className="text-xs text-blue-800">Seller: seller@example.com / seller123</p>
-                    <p className="text-xs text-blue-800">Admin: admin@example.com / admin123</p>
+                    <p className="text-xs text-blue-900">Seller: seller2@example.com / seller123</p>
+                    <p className="text-xs text-blue-900">Admin: admin@example.com / admin123</p>
+                    
                 </div>
             </div>              
         </div>
