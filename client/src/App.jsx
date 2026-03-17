@@ -10,6 +10,8 @@ import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetails';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
               <Route path='/products/:id' element={< ProductDetails/>} />
               <Route path='/cart' element={<Cart/>} />
               <Route path='/checkout' element={< Checkout />} />
+              <Route path='/orders' element={< Orders/>} />
+              <Route path='/orders/:id' element={< OrderDetail/>} />
             </Routes>
           </Layout>
           <Toaster position="top-right" />

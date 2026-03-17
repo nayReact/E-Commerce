@@ -64,6 +64,8 @@ const Checkout = () => {
             shippingAddress,
             paymentMethod: 'cod',
         })
+        console.log('Order response: ', data)
+        
         await fetchCart()
         toast.success('Order placed successfully')
         navigate(`/orders/${data.order._id}`)

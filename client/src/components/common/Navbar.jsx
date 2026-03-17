@@ -53,7 +53,7 @@ const Navbar = () => {
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link 
-                  to={user.role === 'admin' ? '/admin/dashboard' : user.role === 'seller' ? '/seller/dashboard' : '/customer/dashboard'}
+                  to={user.role === 'admin' ? '/admin/dashboard' : user.role === 'seller' ? '/seller/dashboard' : '/orders'}
                   className="text-gray-700 hover:text-primary transition"
                 >
                   Dashboard
