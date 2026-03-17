@@ -103,7 +103,7 @@ export const getOrder = async(req, res) => {
     try{
         const order = await Order.findById(req.params.id)
         .populate('user', 'name email phone')
-        .populate('items.product', 'name images')
+        .populate('items.product', 'name image')
         .populate('items.seller', 'name email')
 
         if(!order) {
@@ -113,7 +113,7 @@ export const getOrder = async(req, res) => {
             })
         }
         const isOwner = order.user._id.toString() === req.user._id.toString()
-        const isSeller = order.items.some(i => i.seller.toString() === req.user._id.toString())
+        const isSeller = order.items.some(i => i.seller && i.seller._id.toString() === req.user._id.toString())
 
         if(!isOwner && req.user.role !== 'admin' && !isSeller) {
             return res.status(403).json({
@@ -136,7 +136,7 @@ export const getOrder = async(req, res) => {
 export const getMyOrders = async(req, res) => {
     try{
         const orders = await Order.find({user: req.user._id})
-        .populate('items.product', 'name images')
+        .populate('items.product', 'name image')
         .sort('-createdAt')
 
         return res.status(200).json({
@@ -155,8 +155,8 @@ export const getMyOrders = async(req, res) => {
 export const updateOrderStatus = async(req, res) => {
     try{
         const {status, trackingNumber, note } = req.body
-        const {orderNumber} = req.params
-        const order = await Order.findOne(orderNumber)
+        
+        const order = await Order.findById(req.params.id)
 
         if(!order) {
             return res.status(404).json({
@@ -208,10 +208,12 @@ export const updateOrderStatus = async(req, res) => {
 
 export const cancelOrder = async(req, res) => {
     try{
-        const {id} = req.params
-        const order = await Order.findOne({
-            orderNumber: id
-        }) 
+        const { id } = req.params
+        console.log('Cancelled Order id: ', id)
+
+        const order = await Order.findById(id)
+        console.log('Found Order: ', order)
+
         if(!order) {
             return res.status(404).json({
                 success: false,
