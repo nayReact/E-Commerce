@@ -12,6 +12,9 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import OrderDetail from './pages/OrderDetails';
+import SellerDashboard from './pages/seller/SellerDashboard';
+import SellerProducts from './pages/seller/SellerProducts';
+import AddProduct from './pages/seller/AddProduct';
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
               <Route path='/checkout' element={< Checkout />} />
               <Route path='/orders' element={< Orders/>} />
               <Route path='/orders/:id' element={< OrderDetail/>} />
+              <Route path='/seller/dashboard' element={< SellerDashboard/>} />
+              <Route path='/seller/products' element={< SellerProducts/>}/>
+              <Route path='/seller/products/add' element= {< AddProduct/>}/>
             </Routes>
           </Layout>
           <Toaster position="top-right" />
