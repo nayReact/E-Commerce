@@ -100,7 +100,7 @@ export const getProduct = async(req, res) => { //get single product
     try{
         const product = await Product.findByIdAndUpdate(req.params.id,
             {$inc: {views: 1}},
-            { new: true }
+            { returnDocument: 'after' }
         )
         .populate("category","name slug")
         .populate("subcategory"," name slug")
@@ -140,18 +140,21 @@ export const updateProduct = async(req, res) => { //update product
                 message: 'Not authorized to update this product '
             })
         }
-        const {specification, ...otherUpdates } =req.body
+        const {specifications, ...otherUpdates } =req.body
         const updates = {
             ...otherUpdates,
             ...(specifications && { specifications: parseSpecs(specifications)})
         }
+        const newPrice = updates.price ?? product.price
+        const newDiscount = updates.discount ?? product.discount
+        updates.finalPrice = newPrice - (newPrice * newDiscount / 100)
 
         if(req.files?.length) {
-            await deleteProductImage(product.images)
-            updates.images = await uploadMultipleToCloudinary(req.files, 'products')
+            await deleteProductImage(product.image)
+            updates.image = await uploadMultipleToCloudinary(req.files, 'products')
         }
 
-        const updatedProduct = await Product.findByIdAndUpdate( req.params.id, updates, {new: true, runValidators: true})
+        const updatedProduct = await Product.findByIdAndUpdate( req.params.id, updates, {returnDocument: 'after', runValidators: true})
         return res.status(200).json({
             success: true,
             messgae: 'Product updates successfully',
@@ -182,7 +185,7 @@ export const deleteProduct = async(req, res) => {
         }
 
         await Promise.all([     //delete image and product softdelete
-            deleteProductImage(product.images),
+            deleteProductImage(product.image),
             Product.findByIdAndUpdate(req.params.id, {isActive: false})
         ])
         return res.status(200).json({
