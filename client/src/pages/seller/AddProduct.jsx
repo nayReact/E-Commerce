@@ -35,19 +35,6 @@ const AddProduct = () => {
         const {name, value} = e.target
         setFormDate(prev => ({...prev, [name] : value }))
     }
-
-    // const newPreviews = []
-    // files.forEach((file, i) => {
-    //     const reader = new FileReader()
-    //     reader.onloadend = () => {
-    //         newPreviews[i] = reader.result
-    //         if(newPreviews.filter(Boolean).length === files.length) {
-    //             setPreviews([...newPreviews])
-    //         }
-    //     }
-    //     reader.readAsDataURL(file)
-    // })
-
     const handleImageChange = (e) => {
         const files = Array.from(e.target.files)
         if(files.length > 5) {
@@ -83,10 +70,7 @@ const AddProduct = () => {
             toast.error(validationError)
             return
         }
-        // if(error) {
-        //     toast.error(error) 
-        //     return
-        // }
+        
         setLoading(true)
         try {
             const form = new FormData()

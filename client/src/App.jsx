@@ -15,6 +15,8 @@ import OrderDetail from './pages/OrderDetails';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import SellerProducts from './pages/seller/SellerProducts';
 import AddProduct from './pages/seller/AddProduct';
+import EditProduct from './pages/seller/EditProduct';
+import SellerOrders from './pages/seller/SellerOrders';
 
 function App() {
   return (
@@ -33,8 +35,11 @@ function App() {
               <Route path='/orders' element={< Orders/>} />
               <Route path='/orders/:id' element={< OrderDetail/>} />
               <Route path='/seller/dashboard' element={< SellerDashboard/>} />
-              <Route path='/seller/products' element={< SellerProducts/>}/>
+              
               <Route path='/seller/products/add' element= {< AddProduct/>}/>
+              <Route path='/seller/products/edit/:id' element={< EditProduct/>} />
+              <Route path='/seller/products' element={< SellerProducts/>}/>
+              <Route path='/seller/orders' element={< SellerOrders/>} />
             </Routes>
           </Layout>
           <Toaster position="top-right" />
