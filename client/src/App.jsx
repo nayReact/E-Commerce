@@ -17,6 +17,9 @@ import SellerProducts from './pages/seller/SellerProducts';
 import AddProduct from './pages/seller/AddProduct';
 import EditProduct from './pages/seller/EditProduct';
 import SellerOrders from './pages/seller/SellerOrders';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminCategories from './pages/admin/AdminCategories';
 
 function App() {
   return (
@@ -40,6 +43,10 @@ function App() {
               <Route path='/seller/products/edit/:id' element={< EditProduct/>} />
               <Route path='/seller/products' element={< SellerProducts/>}/>
               <Route path='/seller/orders' element={< SellerOrders/>} />
+
+              <Route path='/admin/dashboard' element={<AdminDashboard />} />
+              <Route path='/admin/orders' element={< AdminOrders/>} />
+              <Route path='/admin/categories' element={<AdminCategories/>} />
             </Routes>
           </Layout>
           <Toaster position="top-right" />
