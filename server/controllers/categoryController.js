@@ -81,8 +81,8 @@ export const updateCategory = async(req, res) => {
                 message: 'Category not found'
             })
         }
-        const {name, description, image, parent, isActive} = re.body
-        const updates = {name, description, image, parent, isActive }
+        const {name, description, image, parent, isActive } = req.body
+        const updates = {name, description, image, parent: parent || null, isActive}
         Object.keys(updates).forEach(key => {
             if(updates[key] !== undefined) {
                 category[key] = updates[key]
