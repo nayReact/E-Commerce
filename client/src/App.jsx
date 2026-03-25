@@ -20,6 +20,7 @@ import SellerOrders from './pages/seller/SellerOrders';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminCategories from './pages/admin/AdminCategories';
+import AdminUsers from './pages/admin/AdminUsers';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               <Route path='/admin/dashboard' element={<AdminDashboard />} />
               <Route path='/admin/orders' element={< AdminOrders/>} />
               <Route path='/admin/categories' element={<AdminCategories/>} />
+              <Route path='/admin/users' element={< AdminUsers/>} />
             </Routes>
           </Layout>
           <Toaster position="top-right" />
