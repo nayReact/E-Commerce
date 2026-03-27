@@ -74,18 +74,4 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
     return bcrypt.compare(enteredPassword, this.password)
 }
 
-// userSchema.methods.getPublicProfile = function() {
-//     return {
-//         _id: this._id,
-//         name: this.name,
-//         email: this.email,
-//         phone: this.phone,
-//         role: this.role,
-//         avatar: this.avatar,
-//         isApproved: this.isApproved,
-//         addresses: this.addresses,
-//         createdAt: this.createdAt
-//     }
-// }
-
 export default mongoose.model('User', userSchema)
