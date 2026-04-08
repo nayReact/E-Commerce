@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { useContext, useState } from 'react'
 import {CartContext} from '../context/CartContext'
 import { AuthContext } from '../context/AuthContext'
+import { getProfile } from '../api/userAPI'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -26,21 +27,28 @@ const Checkout = () => {
         setShippingAddress(prev => ({...prev, [name]:value }))
     }
 
-    const prefillAddress = () => {
-        const saved = user?.addresses?.find(a => a.isDefault) || user?.addresses?.[0]
-        if(saved) {
+   const prefillAddress = async () => {
+    try {
+        const { data } = await getProfile()
+        const saved = data.user.addresses?.find(a => a.isDefault) 
+            || data.user.addresses?.[0]
+        
+        if (saved) {
             setShippingAddress({
                 street: saved.street || '',
                 city: saved.city || '',
-                state: saved.state || "",
+                state: saved.state || '',
                 pin: saved.pin || '',
-                phone: saved.phone || ''
+                phone: data.user.phone || '',
             })
-            toast.success("Adress pre-filled")
+            toast.success('Address pasted')
         } else {
-            toast.error('No saved Adress found')
+            toast.error('No saved address found')
         }
+    } catch(error) {
+        toast.error('Failed to fetch saved address')
     }
+}
 
     const validate = () => {
         const {street, city, state, pin, phone} = shippingAddress
@@ -96,7 +104,7 @@ const Checkout = () => {
                         <div className="flex items-center justify-between mb-5">
                             <h2 className="text-xl font-bold text-gray-800">Shipping Address</h2>
                             <button onClick={prefillAddress}
-                                className="text-sm text-indigo-600 hover:underline font-medium">Use Saved address</button>
+                                className="text-sm text-indigo-600 hover:underline font-medium">Use Default address</button>
                         </div>
 
                         <div className="space-y-4">

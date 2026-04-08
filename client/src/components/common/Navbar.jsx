@@ -35,6 +35,10 @@ const Navbar = () => {
 
           {/* Right Side - Cart, Auth */}
           <div className="flex items-center space-x-4">
+           
+<Link to="/profile" className="text-gray-700 hover:text-primary transition">
+  Profile
+</Link>
             {/* Cart */}
             {user && (
               <Link to="/cart" className="relative">

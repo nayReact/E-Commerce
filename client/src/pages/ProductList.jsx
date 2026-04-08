@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import {fetchProducts} from '../api/productAPI'
 import ProductFilters from "../components/product/ProductFilters"
 import ProductGrid from '../components/product/ProductGrid'
-//debouncing to stop api call on every key press
+
 const useDebounce = (value, delay) => {
     const [debounce, setDebounce] = useState(value)
     useEffect(() => {

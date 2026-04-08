@@ -27,6 +27,8 @@ import AdminOrders from './pages/admin/AdminOrders';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminUsers from './pages/admin/AdminUsers';
 
+import Profile from './pages/Profile';
+
 function App() {
   return (
     <BrowserRouter>
@@ -81,6 +83,11 @@ function App() {
               <Route path='/admin/users' element={<ProtectedRoute roles={['admin']}>
                 < AdminUsers/>
               </ProtectedRoute>} />
+
+              <Route path='/profile' element= { <ProtectedRoute roles={['customer', 'seller', 'admin']}>
+                <Profile />
+              </ProtectedRoute>} />
+              
             </Routes>
           </Layout>
           <Toaster position="top-right" />
