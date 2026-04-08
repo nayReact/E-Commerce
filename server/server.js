@@ -8,6 +8,7 @@ import productRoutes from './routes/productRoutes.js'
 import cartRoutes from './routes/cartRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 
 dotenv.config() // for env variable
 connectDatabase()
@@ -28,6 +29,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/users', userRoutes)
 //to start server
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
