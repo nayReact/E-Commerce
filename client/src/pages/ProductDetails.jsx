@@ -4,6 +4,7 @@ import { CartContext } from "../context/CartContext"
 import { AuthContext } from "../context/AuthContext"
 import { fetchProduct } from "../api/productAPI"
 import toast from "react-hot-toast"
+import ReviewSection from "../components/product/ReviewSection"
 
 const ProductDetails = () => {
     const {id} = useParams()
@@ -210,6 +211,9 @@ const ProductDetails = () => {
             </div>
           )}
                 </div>
+            </div>
+            <div  className="mt-6">
+                < ReviewSection product={product}/>
             </div>
         </div>
     )
