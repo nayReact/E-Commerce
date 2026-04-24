@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { fetchMyOrders } from "../api/orderAPI"
 import toast from "react-hot-toast"
+import generateInvoice from "../utils/generateInvoice"
+
 
 const statusColors = {
     placed: 'bg-blue-100 text-blue-700',
@@ -101,6 +103,15 @@ const Orders = () => {
                                 <Link to={`/orders/${order._id}`} 
                                     className="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">  
                                     View Details </Link>
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        generateInvoice(order)
+                                    }}
+                                    className="px-4 py-2 border border-indigo-600 text-indigo-600 rounded-xl text-sm font-semibold hover:bg-indigo-50 transition"
+                                >
+                                    Invoice
+                                </button>
                             </div>  
                         </div>
                     ))}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { cancelOrder, fetchOrder } from "../api/orderAPI"
 import toast from "react-hot-toast"
+import generateInvoice from "../utils/generateInvoice"
 
 const statusColors = {
     placed: 'bg-blue-100 text-blue-700',
@@ -118,6 +119,11 @@ const OrderDetail = () => {
                         </div>
                     </div>
                 )}
+
+                <button 
+                    onClick={() => generateInvoice(order)}
+                    className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition">
+                    <span>⬇</span>Download Invoice</button>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
