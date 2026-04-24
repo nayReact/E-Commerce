@@ -5,6 +5,7 @@ import { useContext, useState } from 'react'
 import {CartContext} from '../context/CartContext'
 import { AuthContext } from '../context/AuthContext'
 import { getProfile } from '../api/userAPI'
+import PincodeInput from '../components/common/PincodeInput'
 
 const Checkout = () => {
     const navigate = useNavigate()
@@ -130,20 +131,39 @@ const Checkout = () => {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4">
-                                <div className="flex-1">
-                                    <label className="block text-sm font-medium text-gray-600 mb-1"> PIN </label>
-                                    <input type="text" name='pin' value={shippingAddress.pin} onChange={handleChange}
-                                    placeholder='560001' maxLength={6} className='w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none' />
-                                </div>
+                            <div>
 
-                                <div className="flex-1">
-                                    <label className="block text-sm font-medium text-gray-600 mb-1">Phone</label>
-                                    <input type="text" name='phone' value={shippingAddress.phone} onChange={handleChange}
-                                    placeholder='9876543210' maxLength={10} className='w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none' />
-                                </div>
                             </div>
-                        </div>
+
+                            <div className="flex gap-4">
+
+                                <div className='flex-1'>
+                                    <label className='block text-sm font-medium text-gray-600 mb-1'>PIN Code</label>
+                                    <PincodeInput value={shippingAddress.pin}
+                                         onChange={e => setShippingAddress(prev => ({...prev, pin: e.target.value}))}
+                                            onAutoFill={({ city, state}) => {
+                                                setShippingAddress(prev => ({
+                                                    ...prev,
+                                                city: city || prev.city,
+                                                state: state || prev.state
+                                            }))
+                                    
+                                        }} 
+                                     />
+                                </div>
+                                {/*<div className="flex-1">
+                                    
+                                    <input type="text" name='pin' value={shippingAddress.pin} onChange={handleChange}
+                                         placeholder='560001' maxLength={6} className='w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none' />
+                                </div>*/}
+
+                                            {/*<div className="flex-1">
+                                                <label className="block text-sm font-medium text-gray-600 mb-1">Phone</label>
+                                                <input type="text" name='phone' value={shippingAddress.phone} onChange={handleChange}
+                                                placeholder='9876543210' maxLength={10} className='w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-400 focus:outline-none' />
+                                            </div>*/}
+                            </div> 
+                    </div>
 
                         <div className="mt-6">
                             <h2 className="text-xl font-bold text-gray-800 mb-4">Payment Method </h2>

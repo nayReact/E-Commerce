@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import locationData from '../../data/indiaStateCities.json'
+import PincodeInput from '../common/PincodeInput';
 
 const initialState = {
   street: '', city: '', state: '', pin: '', country: 'India', isDefault: false
@@ -158,7 +159,17 @@ const AddressForm = ({ existing, onSave, onClose }) => {
               <label className="block text-sm font-medium text-gray-600 mb-1">
                 PIN Code *
               </label>
-              <input
+              <PincodeInput value={formData.pin}
+                            onChange={e => setFormData(prev => ({ ...prev, pin:e.target.value}))}
+                            onAutoFill={({ city, state}) => {
+                              setFormData(prev => ({
+                                ...prev,
+                                city: city || prev.city,
+                                state: state || prev.state
+                              }))
+                            }}
+                />
+              {/*<input
                 type="text"
                 name="pin"
                 value={formData.pin}
@@ -170,8 +181,8 @@ const AddressForm = ({ existing, onSave, onClose }) => {
               {formData.pin && !validatePin(formData.pin) && (
                 <p className="text-xs text-red-500 mt-1">
                   Invalid Indian PIN code
-                </p>
-              )}
+                </p> 
+              )}*/}
             </div>
 
             <div>
