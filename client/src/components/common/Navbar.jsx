@@ -34,13 +34,49 @@ const Navbar = () => {
           </div>
 
           {/* Right Side - Cart, Auth */}
-          <div className="flex items-center space-x-4">
-           
-<Link to="/profile" className="text-gray-700 hover:text-primary transition">
-  Profile
-</Link>
+          
+          {user ? (
+            <div className="flex items-center space-x-4">
+
+              {/* Profile link */}
+              {/* <Link to="/profile" className="text-gray-700 hover:text-primary transition">
+                Profile
+              </Link> */}
+
+              {/* Role based dashboard link */}
+              {/* <Link
+                to={
+                  user.role === 'admin' ? '/admin/dashboard'
+                  : user.role === 'seller' ? '/seller/dashboard'
+                  : '/orders'
+                }
+                className="text-gray-700 hover:text-primary transition"
+              >
+                {user.role === 'admin' ? 'Admin Panel'
+                : user.role === 'seller' ? 'Seller Panel'
+                : 'My Orders'}
+              </Link> */}
+
+              {/* <button
+                onClick={logout}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button> */}
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2">
+              {/* <Link to="/login" className="text-primary hover:text-indigo-700 transition font-medium">
+                Login
+              </Link>
+              <Link to="/register" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                Register
+              </Link> */}
+            </div>
+          )}
+
             {/* Cart */}
-            {user && (
+            {user && user.role === 'customer' && (
               <Link to="/cart" className="relative">
                 <svg className="w-6 h-6 text-gray-700 hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -56,11 +92,17 @@ const Navbar = () => {
             {/* Auth Buttons */}
             {user ? (
               <div className="flex items-center space-x-4">
-                <Link 
-                  to={user.role === 'admin' ? '/admin/dashboard' : user.role === 'seller' ? '/seller/dashboard' : '/orders'}
-                  className="text-gray-700 hover:text-primary transition"
+                <Link to='/profile' className='text-gray-700 hover:text-primary transition'>
+                  Profile 
+                </Link>
+
+                 <Link 
+                    to={user.role === 'admin' ? '/admin/dashboard' : user.role === 'seller' ? '/seller/dashboard' : '/orders'}
+                   className="text-gray-700 hover:text-primary transition"
                 >
-                  Dashboard
+                  {user.role === 'admin' ? 'Admin Panel'
+                    : user.role === 'seller' ? 'Seller Panel'
+                    : 'My Orders'}
                 </Link>
                 <button
                   onClick={logout}
@@ -87,7 +129,6 @@ const Navbar = () => {
             )}
           </div>
         </div>
-      </div>
     </nav>
   );
 };

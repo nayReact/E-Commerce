@@ -73,6 +73,8 @@ const ProductDetails = () => {
     const images = product.images?.length ? product.image : [{url: 'https://placehold.co/600x600/e3e3e3/666666?text=No+Image'}]
 
     const isOutOfStock = product.stock === 0 
+
+
     return (
         <div className="min-h-screen bg-grey-50 py-10">
             <div className="max-w-6xl mx-auto px-4">
@@ -212,6 +214,36 @@ const ProductDetails = () => {
           )}
                 </div>
             </div>
+
+
+            {/* Quantity + Add to Cart — customers only */}
+{!isOutOfStock && (!user || user.role === 'customer') && (
+  <div className="flex items-center gap-4">
+    <div className="flex items-center border rounded-lg overflow-hidden">
+      <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
+        className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition">
+        −
+      </button>
+      <span className="px-4 py-2 font-semibold">{quantity}</span>
+      <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+        className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition">
+        +
+      </button>
+    </div>
+
+    <button onClick={handleAddToCart} disabled={addingToCart}
+      className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-60">
+      {addingToCart ? 'Adding...' : 'Add to Cart'}
+    </button>
+  </div>
+)}
+
+{/* Message for seller/admin */}
+{user && user.role !== 'customer' && !isOutOfStock && (
+  <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-500 text-center border">
+    {user.role === 'seller' ? 'Switch to a customer account to purchase' : 'Admins cannot purchase products'}
+  </div>
+)}
             <div  className="mt-6">
                 < ReviewSection product={product}/>
             </div>

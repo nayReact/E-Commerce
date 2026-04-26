@@ -22,6 +22,8 @@ const ProductCard = ({product}) => {
         }
     }
     const image = product.omage?.[0]?.url || 'https://placehold.co/300x300/e3e3e3/666666?text=No+Image'
+
+
     return(
         <Link to={`/products/${product._id}`} className="group">
             <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden border-grey-100">
@@ -57,10 +59,31 @@ const ProductCard = ({product}) => {
                             </span>
                         )}
                     </div>
-                    <button onClick={handleAddToCart} disabled={product.stock === 0}
+                    
+                    {/* Add to Cart — only for customers and guests */}
+                    {(!user || user.role === 'customer') && (
+                    <button
+                        onClick={handleAddToCart}
+                        disabled={product.stock === 0}
+                        className="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+                    >
+                        {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                    </button>
+                    )}
+
+                    {/* Show View Product instead for seller/admin */}
+                    {user && user.role !== 'customer' && (
+                    <div className="w-full bg-gray-100 text-gray-600 py-2 rounded-lg text-sm font-semibold text-center">
+                        View Product
+                    </div>
+                    )}
+                    {/* <button onClick={handleAddToCart} disabled={product.stock === 0}
                         className="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
                         {product.stock === 0 ? 'Out of stock' : 'Add to Cart'}
-                    </button>
+                    </button> */}
+
+
+
                 </div>
             </div>
         </Link>
