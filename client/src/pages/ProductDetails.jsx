@@ -162,40 +162,46 @@ const ProductDetails = () => {
                                     )}
                                 </div>
                                 
-                                  {!isOutOfStock && (
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center border rounded-lg overflow-hidden">
-                    <button
-                      onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                      className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition"
-                    >
-                      −
-                    </button>
-                    <span className="px-4 py-2 font-semibold">{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-                      className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition"
-                    >
-                      +
-                    </button>
-                  </div>
+                                  {!isOutOfStock &&  (!user || user.role === 'customer') && (
+                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center border rounded-lg overflow-hidden">
+                                        <button
+                                            onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                                            className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition"
+                                            >
+                                            −
+                                        </button>
+                                        <span className="px-4 py-2 font-semibold">{quantity}</span>
+                                        <button
+                                            onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+                                            className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition"
+                                            >
+                                            +
+                                        </button>
+                                    </div>
 
-                  <button
-                    onClick={handleAddToCart}
-                    disabled={addingToCart}
-                    className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-60"
-                  >
-                    {addingToCart ? 'Adding...' : 'Add to Cart'}
-                  </button>
-                </div>
-              )}
+                                    <button
+                                        onClick={handleAddToCart}
+                                        disabled={addingToCart}
+                                        className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-60"
+                                    >
+                                        {addingToCart ? 'Adding...' : 'Add to Cart'}
+                                    </button>
+                                    </div>
+                                )}
+                                
+                                {user && user.role !== 'customer' && !isOutOfStock && (
+                                <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-500 text-center border">
+                                    {user.role === 'seller' ? 'Switch to a customer account to purchase' : 'Admins cannot purchase products'}
+                                </div>
+                                )}
 
-              <div className="pt-4 border-t text-sm text-gray-500">
-                Sold by{' '}
-                <span className="font-medium text-gray-700">
-                  {product.seller?.name}
-                </span>
-              </div>
+                            <div className="pt-4 border-t text-sm text-gray-500">
+                                Sold by{' '}
+                                <span className="font-medium text-gray-700">
+                                {product.seller?.name}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -216,34 +222,7 @@ const ProductDetails = () => {
             </div>
 
 
-            {/* Quantity + Add to Cart — customers only */}
-{!isOutOfStock && (!user || user.role === 'customer') && (
-  <div className="flex items-center gap-4">
-    <div className="flex items-center border rounded-lg overflow-hidden">
-      <button onClick={() => setQuantity(q => Math.max(1, q - 1))}
-        className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition">
-        −
-      </button>
-      <span className="px-4 py-2 font-semibold">{quantity}</span>
-      <button onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
-        className="px-4 py-2 text-lg font-bold hover:bg-gray-100 transition">
-        +
-      </button>
-    </div>
-
-    <button onClick={handleAddToCart} disabled={addingToCart}
-      className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 transition disabled:opacity-60">
-      {addingToCart ? 'Adding...' : 'Add to Cart'}
-    </button>
-  </div>
-)}
-
-{/* Message for seller/admin */}
-{user && user.role !== 'customer' && !isOutOfStock && (
-  <div className="p-4 bg-gray-50 rounded-xl text-sm text-gray-500 text-center border">
-    {user.role === 'seller' ? 'Switch to a customer account to purchase' : 'Admins cannot purchase products'}
-  </div>
-)}
+            
             <div  className="mt-6">
                 < ReviewSection product={product}/>
             </div>
