@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 export const getProfile = async(req, res) => {
        try{ 
@@ -97,6 +98,50 @@ export const setDefaultAddress = async(req, res) => {
         return res.status(200).json({success: true, addresses: user.addresses })
 
     } catch(error) {
-        res.status(500).json({success: false, message: error.message})
+        return res.status(500).json({success: false, message: error.message})
+    }
+}
+
+export const changePassword = async(req, res) => {
+    try {
+        const {currentPassword, newPassword, confirmPassword } = req.body
+
+        //to validate inputs
+        if(!currentPassword || !newPassword || !confirmPassword) {
+            return res.status(400).json({
+                success: false, 
+                message: 'All fields are required'
+            })
+        }
+
+        if(newPassword !== confirmPassword) {
+            return res.status(400).json({ success: false, message: 'Password do not match'})
+        }
+
+        if( newPassword.length < 6) {
+             return res.status(400).json({ success: false, message: 'New password must be atleast 6 characters'})
+        }
+
+        if(!/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(newPassword)) {
+            return res.status(400).json({ success: false, message: 'Password must be 8+ chars, include 1 uppercase & 1 number'})
+        }
+
+        //get the user with password
+        const user = await User.findById(req.user._id).select('+password')
+
+        //to verify curr pass
+        const isMatch = await user.comparePassword(currentPassword)
+        if(!isMatch) {
+            return res.status(401).json({ success: false, message: 'Current password is incorrect'})
+        }
+
+        //update pass-pre save hook will hash it
+        user.password = newPassword
+        await user.save()
+
+        return res.status(200).json({ success: true, message: 'Password chaged successfully '})
+
+    } catch(error) {
+        return res.status(500).json({success: false, message: error.message})
     }
 }

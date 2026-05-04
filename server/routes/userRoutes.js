@@ -1,6 +1,6 @@
 import express from 'express'
 import { protect } from '../middleware/authMiddleware.js'
-import { addAddress, deleteAddress, getProfile, setDefaultAddress, updateAddress, updateProfile } from '../controllers/userController.js'
+import { addAddress, changePassword, deleteAddress, getProfile, setDefaultAddress, updateAddress, updateProfile } from '../controllers/userController.js'
 
 const router = express.Router()
 
@@ -15,5 +15,7 @@ router.put('/profile/address/:addressId', protect,updateAddress )
 router.delete('/profile/address/:addressId', protect, deleteAddress)
 
 router.put('/profile/address/:addressId/default', protect, setDefaultAddress)
+
+router.put('/chage-password', protect, changePassword)
 
 export default router

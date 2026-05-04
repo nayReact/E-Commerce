@@ -8,6 +8,7 @@ import {
 import AddressCard from '../components/profile/AddressCard';
 import AddressForm from '../components/profile/AddressForm';
 import toast from 'react-hot-toast';
+import ChangePasswordForm from '../components/profile/ChangePasswordForm';
 
 const Profile = () => {
   const { user, login } = useContext(AuthContext);
@@ -126,10 +127,15 @@ const Profile = () => {
           {/* ── Left: Avatar + Info ── */}
           <div className="md:col-span-1">
             <div className="bg-white rounded-2xl shadow border border-gray-100 p-6 text-center">
-              <img src={profile?.avatar} alt={profile?.name}
+              <img src={profile?.avatar || null} alt={profile?.name}
                 className="w-24 h-24 rounded-full object-cover border-4 border-indigo-100 mx-auto mb-4" />
-              <h2 className="font-bold text-gray-800 text-lg">{profile?.name}</h2>
-              <p className="text-gray-500 text-sm">{profile?.email}</p>
+
+              <h2 className="font-bold text-gray-800 text-lg">
+                  {profile?.name}
+              </h2>
+              <p className="text-gray-500 text-sm">
+                  {profile?.email}
+              </p>
               <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold capitalize ${
                 profile?.role === 'admin' ? 'bg-purple-100 text-purple-700'
                 : profile?.role === 'seller' ? 'bg-blue-100 text-blue-700'
@@ -214,6 +220,7 @@ const Profile = () => {
                 </div>
               )}
             </div>
+            <ChangePasswordForm />
 
             {/* Addresses */}
             <div className="bg-white rounded-2xl shadow border border-gray-100 p-6">
@@ -227,9 +234,9 @@ const Profile = () => {
                 <button onClick={() => setShowAddressForm(true)}
                   className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-indigo-700 transition">
                   + Add Address
-                </button>
+                </button>             
               </div>
-
+              
               {profile?.addresses?.length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
                   <p className="text-3xl mb-2">📍</p>
@@ -246,12 +253,15 @@ const Profile = () => {
                       onSetDefault={handleSetDefault}
                     />
                   ))}
-                </div>
+                </div>               
               )}
             </div>
-          </div>
-        </div>
+            
+          </div>          
+        </div> 
       </div>
+      
+      
 
       {/* Address Form Modal */}
       {showAddressForm && (
