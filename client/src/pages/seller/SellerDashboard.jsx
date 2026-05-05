@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { fetchSellerOrders, fetchSellerProducts } from "../../api/sellerAPI"
+import LowStockAlert from '../../pages/seller/LowStockAlert'
 
 const StartCard = ({ title, value, icon, color}) => (
     <div className={`bg-white rounded-2xl shadow p-6 border-l-4 ${color}`}>
@@ -65,15 +66,27 @@ const SellerDashboard = () => {
                             <h1 className="text-3xl font-bold text-gray-800">Seller Dashboard</h1>
                             <p className="text-gray-500 mt-1">Manage your products and orders  </p>
                         </div>
+                        <LowStockAlert products={products} />
                         <Link to='/seller/products/add'
                             className="bg-indigo-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"> Add Product </Link>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                        <StartCard title= "Total Products" value={products.length} icon="" colors="bordeer-indigo-500" />
-                        <StartCard title= "Total Orders" value={orders.length} icon="" colors="bordeer-green-500" />
+                        <StartCard title= "Total Products" value={products.length} icon="📦" colors="bordeer-indigo-500" />
+                        <StartCard title= "Total Orders" value={orders.length} icon="🛒" colors="bordeer-green-500" />
                         <StartCard title= "Pending Orders" value={pendingOrders} icon="" colors="bordeer-yellow-500" />
                         <StartCard title= "Total Revenue" value={`${totalRevenue.toFixed(0)}`} icon="" colors="bordeer-purple-500" />
+                        <StartCard 
+                            title="Low stock"  value={products.filter(p => p.stock <= 5 && p.stock > 0).length}
+                            icon="⚠️"
+                            color="border-yellow-500"
+                        />
+                        <StartCard
+                            title="Out of Stock"
+                            value={products.filter(p => p.stock === 0).length}
+                            icon="🚨"
+                            color="border-red-500"
+                        />
                     </div>
 
                     <div className="bg-white rounded-2xl shadow border border-gray-100 mb-8">

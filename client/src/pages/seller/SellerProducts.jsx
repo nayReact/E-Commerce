@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { fetchSellerProducts, deleteProduct } from "../../api/sellerAPI";
 import toast from "react-hot-toast";
+import LowStockAlert from '../../pages/seller/LowStockAlert'
 
 const SellerProducts = () => {
     const [products, setProducts] = useState([])
@@ -54,6 +55,8 @@ const SellerProducts = () => {
                         <h1 className="text-3xl font-bold text-gray-800">My Products</h1>
                         <p className="text-gray-500 mt-1">{products.length} products listed. </p>
                     </div>
+
+                    <LowStockAlert products={products} />
                     <Link to="/seller/products/add"
                         className="bg-indigo-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
                         > Add Product </Link>
@@ -98,16 +101,39 @@ const SellerProducts = () => {
                                             <p className="text-xs text-gray-400 line-through">{product.price}</p>
                                         )}
                                     </div>
-
+                                    
                                     <div className="col-span-2 text-center">
+                                        <div className="flex flex-col items-center gap-1">
+                                            <span className={`font-bold text-sm ${
+                                                product.stock === 0 ? 'text-red-500'
+                                                : product.stock <= 5 ? 'text-orange-500'
+                                                : 'text-green-600'
+                                            }`}>
+                                                {product.stock}
+                                            </span>
+                                            {product.stock === 0 && (
+                                                <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold">
+                                                    Out of Stock
+                                                </span>
+                                            )}
+                                            {product.stock > 0 && product.stock <= 5 && (
+                                                <span className="text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded-full font-semibold">
+                                                    Low Stock
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* <div className="col-span-2 text-center">
                                         <span className={`font-semibold ${
                                             product.stock === 0
                                                 ? 'text-red-500'
                                                 : product.stock <= 5
                                                 ? 'text-orange-500'
                                                 : 'text-green-600'
-                                            }`}>{product.stock}</span>
-                                    </div>
+                                            }`}>{product.stock}
+                                        </span>
+                                    </div> */}
 
                                     <div className="col-span-1 text-center">
                                         <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -116,7 +142,8 @@ const SellerProducts = () => {
                                                 : product.status === 'draft'
                                                 ? 'bg-gray-100 text-gray-500'
                                                 : 'bg-red-100 text-red-500'
-                                            }`}>{product.status}</span>
+                                            }`}>{product.status}
+                                        </span>
                                     </div>
 
                                     <div className="col-span-2 flex items-center justify-center gap-2">
