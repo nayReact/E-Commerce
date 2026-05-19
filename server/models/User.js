@@ -42,6 +42,16 @@ const userSchema = new mongoose.Schema({
         default: true
         
     },
+
+    otp: {
+        code: String,
+        expireAt: Date,
+        attempts: {
+            type: Number,
+            default: 0
+        }
+    },
+
     addresses: [{  //could be multiple ship addrs
         street: String,
         city: String,
