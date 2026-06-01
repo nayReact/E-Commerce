@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../context/CartContext"
 import { AuthContext } from "../../context/AuthContext";
+import WishlistButton from './WishlistButton'
 import toast from "react-hot-toast";
 
 const ProductCard = ({product}) => {
@@ -30,7 +31,14 @@ const ProductCard = ({product}) => {
                 <div className="relative overflow-hidden h-52">
                     <img src={image}
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition suration-300" />
+                        className="w-full h-full object-cover group-hover:scale-105 transition suration-300"
+                    />
+
+                    <div className="absolute top-2 right-2">
+                        <WishlistButton productId = {product._id}
+                            className = 'bg-white rounded-full p-1.5 shadow' 
+                        />
+                    </div>
 
                     {product.discount > 0 && (
                         <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">

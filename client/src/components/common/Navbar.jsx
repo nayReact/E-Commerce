@@ -2,10 +2,14 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
+import { WishlistContext } from '../../context/WishlistContext';
+
+
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const { cart } = useContext(CartContext);
+  const { wishlistCount } = useContext(WishlistContext)
 
   const cartItemsCount = cart?.totalItems || 0;
 
@@ -26,54 +30,30 @@ const Navbar = () => {
             <Link to="/products" className="text-gray-700 hover:text-primary transition">
               Products
             </Link>
-            {user && (
-              <Link to="/orders" className="text-gray-700 hover:text-primary transition">
-                My Orders
-              </Link>
-            )}
+           
           </div>
 
+         
+
+
           {/* Right Side - Cart, Auth */}
-          
-          {user ? (
-            <div className="flex items-center space-x-4">
-
-              {/* Profile link */}
-              {/* <Link to="/profile" className="text-gray-700 hover:text-primary transition">
-                Profile
-              </Link> */}
-
-              {/* Role based dashboard link */}
-              {/* <Link
-                to={
-                  user.role === 'admin' ? '/admin/dashboard'
-                  : user.role === 'seller' ? '/seller/dashboard'
-                  : '/orders'
-                }
-                className="text-gray-700 hover:text-primary transition"
-              >
-                {user.role === 'admin' ? 'Admin Panel'
-                : user.role === 'seller' ? 'Seller Panel'
-                : 'My Orders'}
-              </Link> */}
-
-              {/* <button
-                onClick={logout}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-              >
-                Logout
-              </button> */}
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2">
-              {/* <Link to="/login" className="text-primary hover:text-indigo-700 transition font-medium">
-                Login
-              </Link>
-              <Link to="/register" className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-                Register
-              </Link> */}
-            </div>
-          )}
+          <div className="flex items-center space-x-4">
+           
+            {/* For wishlist icon */}
+             {user && user.role === 'customer' && (
+            <Link to="/wishlist" className="relative">
+                <svg className="w-6 h-6 text-gray-700 hover:text-red-500 transition"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {wishlistCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {wishlistCount}
+                    </span>
+                )}
+            </Link>
+            )}
 
             {/* Cart */}
             {user && user.role === 'customer' && (
@@ -127,6 +107,7 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
+            </div>
           </div>
         </div>
     </nav>

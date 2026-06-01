@@ -28,13 +28,17 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminUsers from './pages/admin/AdminUsers';
 
 import Profile from './pages/Profile';
+import { WishlistProvider } from './context/WishlistContext';
+import Wishlist from './pages/Wishlist';
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <CartProvider>
-          <Layout>
+          <WishlistProvider>
+           
+              <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path='/login' element={<Login />} />
@@ -87,9 +91,16 @@ function App() {
               <Route path='/profile' element= { <ProtectedRoute roles={['customer', 'seller', 'admin']}>
                 <Profile />
               </ProtectedRoute>} />
+
+              <Route path='/wishlist' element={ <ProtectedRoute roles={['customer']}>
+                 <Wishlist />
+                </ProtectedRoute>
+              } />
               
             </Routes>
           </Layout>
+          </WishlistProvider>
+          
           <Toaster position="top-right" />
         </CartProvider>
       </AuthProvider>

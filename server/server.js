@@ -10,6 +10,7 @@ import orderRoutes from './routes/orderRoutes.js'
 import adminRoutes from './routes/adminRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import reviewRoutes from './routes/reviewRoutes.js'
+import wishlistRoutes from './routes/wishlistRoutes.js'
 
 dotenv.config() // for env variable
 connectDatabase()
@@ -32,6 +33,7 @@ app.use('/api/orders', orderRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/reviews', reviewRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 
 //to start server
 const PORT = process.env.PORT || 5000

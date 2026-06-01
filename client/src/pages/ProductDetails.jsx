@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext"
 import { fetchProduct } from "../api/productAPI"
 import toast from "react-hot-toast"
 import ReviewSection from "../components/product/ReviewSection"
+import WishlistButton from "../components/product/WishlistButton"
 
 const ProductDetails = () => {
     const {id} = useParams()
@@ -120,7 +121,17 @@ const ProductDetails = () => {
                                 )}
                             </div>
 
-                            <h1 className="text-2xl md:text-3xl font-bold text-grey-900">{product.name}</h1>
+                            <div className="flex item-start justify-between gap-3">
+                                <h1 className="text-2xl md:text-3xl font-bold text-grey-900">
+                                    {product.name}
+                                </h1>
+                                <WishlistButton
+                                    productId = {product._id}
+                                    className='mt-1 flex-shrink-0' 
+                                />
+                            </div>
+
+                            
                             
                             <div className="flex items-center gap-2"> 
                                 <div className="flex text-yellow-400">
