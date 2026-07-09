@@ -7,6 +7,36 @@ const orderSchema = new mongoose.Schema({
         unique: true,
         
     },
+
+    expectedDelivery: {
+        type: Date
+    },
+
+    returnRequest: {
+        requested: { 
+            type: Boolean, 
+            default: false
+        },
+        reason: String,
+        description: String,
+        requestedAt: Date,
+        status: {
+            type: String,
+            enum: ['pending', 'approved', 'rejected']
+        },
+        resolvedAt: Date,
+        resolvedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        
+        refundStatus: {
+            type: String,
+            enum: ['none', 'pending', 'processed'],
+            default: 'none'
+        }
+    },
+
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -82,7 +112,7 @@ const orderSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['placed','processing','shipped','delivered','cancelled'],
+        enum: ['placed','processing','shipped','delivered','cancelled', 'returned'],
         default: 'placed'
     },
     statusHistory: [

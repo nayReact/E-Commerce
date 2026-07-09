@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { cancelOrder, fetchOrder } from "../api/orderAPI"
-import toast from "react-hot-toast"
+import { AuthContext} from '../context/AuthContext'
+import { updateReturnStatus } from "../api/returnAPI"
+import ReturnRequestForm from "../components/orders/ReturnRequestForm"
+import ReturnStatus from "../components/orders/ReturnStatus"
 import generateInvoice from "../utils/generateInvoice"
+import toast from 'react-hot-toast'
 
 const statusColors = {
     placed: 'bg-blue-100 text-blue-700',
@@ -17,12 +21,15 @@ const statusSteps = ['placed','processing', 'shipped', 'delivered']
 const OrderDetail = () => {
     const {id} = useParams()
     const navigate = useNavigate()
+    const {user} = useContext(AuthContext)
 
     const [order, setOrder] = useState(null)
     const [loading, setLoading] = useState(true)
     const [cancelling, setCancelling] = useState(false)
     const [showCancelModal, setShowCancelModal] = useState(false)
     const [cancelReason, setCancelReason] = useState('')
+    const [showReturnForm, setShowReturnForm] = useState(false)
+
 
     useEffect(() => {
         if(!id || id === 'undefined') {
@@ -70,6 +77,33 @@ const OrderDetail = () => {
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
             </div>
         )
+    }
+
+    const isReturnEligible = () => {
+        if(order?.status !== 'delivered') return false
+        if(order?.returnRequest?.requested) return false
+
+        const deliveredAt = order?.statusHistory?.find(
+            h => h.status === 'delivered'
+        )?.updatedAt || order?.updatedAt
+
+        const daysSince = Math.floor(
+            (new Date() - new Date(deliveredAt)) / (1000*60*60*24)
+        )
+        return daysSince <= 7
+    }
+
+    const handleUpdateReturnStatus = async(status, refundStatus) => {
+        try {
+            const {data} = await updateReturnStatus(order._id, {
+                status,
+                refundStatus
+            })
+            setOrder(data.order)
+            toast.success(`Retun ${status} successfully`)
+        } catch(error) {
+            toast.error(error?.response?.data?.message || 'Failed to update return')
+        }
     }
 
     if(!order) return null
@@ -195,12 +229,85 @@ const OrderDetail = () => {
                     </div>
                 </div>
 
+                
+                {/* Expected Delivery Date */}
+                {order?.expectedDelivery && order?.status !== 'delivered' &&
+                order?.status !== 'cancelled' && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
+                        <div className="flex items-center gap-3">
+                            <span className="text-2xl">🚚</span>
+                            <div>
+                                <p className="text-sm text-blue-600 font-medium">
+                                    Expected Delivery
+                                </p>
+                                <p className="font-bold text-blue-800">
+                                    {new Date(order.expectedDelivery).toLocaleDateString('en-IN', {
+                                        weekday: 'long',
+                                        day: 'numeric',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Return Status */}
+                {order?.returnRequest?.requested && (
+                    <div className="mb-6">
+                        <ReturnStatus
+                            returnRequest={order.returnRequest}
+                            canUpdate={user?.role === 'seller' || user?.role === 'admin'}
+                            onUpdateStatus={handleUpdateReturnStatus}
+                        />
+                    </div>
+                )}
+
+                {/* Return Button */}
+                {user?.role === 'customer' && isReturnEligible() && (
+                    <button
+                        onClick={() => setShowReturnForm(true)}
+                        className="w-full border-2 border-red-500 text-red-500 py-3 rounded-xl font-semibold hover:bg-red-50 transition mb-6"
+                    >
+                        🔄 Request Return / Refund
+                    </button>
+                )}
+
+                    {/* Days left for return */}
+                    {user?.role === 'customer' &&
+                    order?.status === 'delivered' &&
+                    !order?.returnRequest?.requested && (
+                        <p className="text-xs text-center text-gray-400 mb-6">
+                            Return window:{' '}
+                            {Math.max(0, 7 - Math.floor(
+                                (new Date() - new Date(
+                                    order?.statusHistory?.find(h => h.status === 'delivered')?.updatedAt
+                                    || order?.updatedAt
+                                )) / (1000 * 60 * 60 * 24)
+                            ))} days remaining
+                        </p>
+                    )}
+
+
                 {canCancel && (
                     <div className="flex justify-end">
                         <button onClick={() => setShowCancelModal(true)}
                             className="bg-red-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-600 transition"> Cancel Order </button>
                     </div>
                 )}
+
+                    {/* Return Form Modal */}
+                    {showReturnForm && (
+                        <ReturnRequestForm
+                            order={order}
+                            onSuccess={(updatedOrder) => {
+                                setOrder(updatedOrder)
+                                setShowReturnForm(false)
+                            }}
+                            onClose={() => setShowReturnForm(false)}
+                        />
+                    )}
 
                 {showCancelModal && (
                     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">

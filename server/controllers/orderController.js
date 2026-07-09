@@ -13,9 +13,24 @@ const restoreStock = async(items) => {
     )
 }
 
+const calculateExpectedDelivery = (paymentMethod) => {
+    const today = new Date()
+    const minday = paymentMethod === 'cod' ? 5 : 3
+    const maxday = paymentMethod === 'cod' ? 7 : 5
+
+    const days = Math.floor((minday + maxday)/ 2 )
+    const delivery = new Date(today)
+    delivery.setDate(today.getDate() + days )
+
+    if(delivery.getDay() === 0) delivery.setDate(delivery.getDate() + 1 )
+        return delivery
+}
+
 export const createOrder = async(req, res) => {
     try{ 
-        const { shippingAddress } = req.body
+        const { items, paymentMethod, shippingAddress } = req.body
+        const expectedDelivery = calculateExpectedDelivery(paymentMethod)
+        
         if(!shippingAddress?.street || !shippingAddress.city ||!shippingAddress?.pin || !shippingAddress?.phone) {
             return res.status(400).json({
                 success: false,
@@ -74,7 +89,8 @@ export const createOrder = async(req, res) => {
                 paymentStatus: 'pending',
                 itemsPrice,
                 shippingPrice,
-                totalPrice: itemsPrice + shippingPrice
+                totalPrice: itemsPrice + shippingPrice,
+                expectedDelivery: calculateExpectedDelivery(paymentMethod)
             })
 
             await Promise.all(

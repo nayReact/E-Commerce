@@ -86,6 +86,7 @@ const Orders = () => {
                                             <p className="text-xs font-medium text-gray-700 max-w-[100px] truncate">{item.name}</p>
                                             <p className="text-xs text-gray-400">{item.quantity}</p>
                                         </div>
+
                                     </div>
                                 ))}
                                 {order.items.length > 4 && (
@@ -94,6 +95,31 @@ const Orders = () => {
                                     </div>
                                 )}
                             </div>
+
+                                 {/* Expected Delivery */}
+                                        {order.expectedDelivery &&
+                                        order.status !== 'delivered' &&
+                                        order.status !== 'cancelled' && (
+                                        <p className="text-xs text-blue-600 mt-1">
+                                            🚚 Expected by{' '}
+                                            {new Date(order.expectedDelivery).toLocaleDateString('en-IN', {
+                                                day: 'numeric', month: 'short'
+                                            })}
+                                        </p>
+                                        )}
+
+                                        {/* Return badge */}
+                                        {order.returnRequest?.requested && (
+                                        <span className={`text-xs px-2 py-0.5 rounded-full font-semibold mt-1 inline-block ${
+                                            order.returnRequest.status === 'approved'
+                                                ? 'bg-green-100 text-green-700'
+                                                : order.returnRequest.status === 'rejected'
+                                                ? 'bg-red-100 text-red-500'
+                                                : 'bg-yellow-100 text-yellow-700'
+                                        }`}>
+                                            Return {order.returnRequest.status}
+                                        </span>
+                                        )}
 
                             <div className="flex items-center justify-between pt-4 border-t">
                                 <div>

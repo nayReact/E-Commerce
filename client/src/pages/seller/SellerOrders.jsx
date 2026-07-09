@@ -1,5 +1,7 @@
-import { useState, useEffect, use, useDeferredValue } from "react";
+import { useState, useEffect} from "react";
 import { fetchSellerOrders, updateOrderStatus } from "../../api/sellerAPI";
+import { updateReturnStatus } from "../../api/returnAPI";
+import ReturnStatus from "../../components/orders/ReturnStatus";
 import toast from "react-hot-toast";
 
 const statusColors = {
@@ -7,7 +9,7 @@ const statusColors = {
     processing: 'bg-yellow-100 text-yellow-700',
     shipped: 'bg-purple-100 text-purple-700',
     delivered: 'bg-green-100 text-green-700',
-    cancelled: 'bg-red-100 text-blurede-700'
+    cancelled: 'bg-red-100 text-red-700'
 }
 
 const nextStatusOptions = {
@@ -123,6 +125,31 @@ const SellerOrders = () => {
                                             ))}
                                         </div>
 
+
+                                        {order.returnRequest?.requested && (
+                                        <div className="mt-4 pt-4 border-t">
+                                            <h4 className="font-semibold text-gray-700 mb-2">Return Request</h4>
+                                            <ReturnStatus
+                                                returnRequest={order.returnRequest}
+                                                canUpdate={true}
+                                                onUpdateStatus={async(status, refundStatus) => {
+                                                    try {
+                                                        const { data } = await updateReturnStatus(order._id, {
+                                                            status, refundStatus
+                                                        })
+                                                        setOrders(prev => prev.map(o =>
+                                                            o._id === order._id ? data.order : o
+                                                        ))
+                                                        toast.success(`Return ${status}`)
+                                                    } catch(error) {
+                                                        toast.error('Failed to update return')
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+
+
                                         <div className="bg-gray-50 rounded-xl p-4 mb-4 text-sm text-gray-600">
                                             <p className="font-semibold text-gray-800 mb-1">Ship to:</p>
                                             <p>{order.shippingAddress.street}</p>
@@ -162,3 +189,6 @@ const SellerOrders = () => {
 }
 
 export default SellerOrders
+
+
+
